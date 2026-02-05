@@ -12,7 +12,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Get basic stats for the main dashboard
+        // Redirect to appropriate dashboard based on user's role and position
+        if ($user->role === 'HRM' && $user->position === 'manager') {
+            return $this->hrmManager($request);
+        } elseif ($user->role === 'HRM' && $user->position === 'staff') {
+            return $this->hrmEmployee($request);
+        } elseif ($user->role === 'SCM' && $user->position === 'manager') {
+            return $this->scmManager($request);
+        } elseif ($user->role === 'SCM' && $user->position === 'staff') {
+            return $this->scmEmployee($request);
+        }
+
+        // Default dashboard for other roles
         $stats = [
             'total_tasks' => 0,
             'pending_tasks' => 0,
@@ -21,6 +32,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard/Index', [
             'stats' => $stats,
+            'user' => $user,
         ]);
     }
 

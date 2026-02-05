@@ -5,7 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
+import Select from '@/Components/ui/select.vue';
 
 const form = useForm({
     name: '',
@@ -51,11 +51,10 @@ const submit = () => {
             </div>
 
             <div class="grid gap-6 md:grid-cols-2">
-                <!-- In the template section for department field -->
                 <div class="mt-4">
                     <InputLabel for="role" value="Department" class="text-gray-700 dark:text-gray-300" />
                     <Select v-model="form.role" required>
-                        <option value="" disabled selected>Select department</option>
+                        <option value="" disabled>Select department</option>
                         <option value="HRM">Human Resource Management</option>
                         <option value="SCM">Supply Chain Management</option>
                     </Select>
@@ -65,14 +64,9 @@ const submit = () => {
                 <div class="mt-4">
                     <InputLabel for="position" value="Position" class="text-gray-700 dark:text-gray-300" />
                     <Select v-model="form.position" required>
-                        <SelectTrigger
-                            class="border-gray-300 focus:border-[#1E40AF] focus:ring-[#1E40AF] dark:border-gray-600 dark:bg-gray-700">
-                            <SelectValue placeholder="Select position" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="manager">Manager</SelectItem>
-                            <SelectItem value="staff">Staff</SelectItem>
-                        </SelectContent>
+                        <option value="" disabled>Select position</option>
+                        <option value="manager">Manager</option>
+                        <option value="staff">Staff</option>
                     </Select>
                     <InputError class="mt-2" :message="form.errors.position" />
                 </div>

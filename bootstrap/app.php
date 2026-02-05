@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        //
+        // Register custom middleware aliases
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+            'position' => \App\Http\Middleware\CheckPosition::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

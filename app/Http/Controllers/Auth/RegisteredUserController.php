@@ -15,19 +15,11 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): Response
     {
         return Inertia::render('Auth/Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -38,15 +30,29 @@ class RegisteredUserController extends Controller
             'position' => 'required|in:manager,staff',
         ]);
 
+        $role = $request->role;
+        $userCount = User::where('role', $role)->count() + 1;
+        $employeeId = 'MTX-'.strtoupper($role).'-'.str_pad($userCount, 4, '0', STR_PAD_LEFT);
+
+        $departmentName = match ($request->role) {
+            'HRM' => 'Human Resource Management',
+            'SCM' => 'Supply Chain Management',
+            default => $request->role,
+        };
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'position' => $request->position,
+            'employee_id' => $employeeId,
+            'department' => $departmentName,
+            'join_date' => now(),
+            'is_active' => true,
         ]);
 
-        event(new Registered($user));
+        // event(new Registered($user)); // <--- Commented out to stop verification email
 
         Auth::login($user);
 
