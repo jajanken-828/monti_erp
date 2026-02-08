@@ -11,6 +11,15 @@ class Interview extends Model
     protected $fillable = [
         'applicant_id',
         'scheduled_at',
+        'interview_type',
+        'duration',
+        'interviewer',
+        'location',
+        'notes',
+    ];
+
+    protected $casts = [
+        'scheduled_at' => 'datetime',
     ];
 
     /**

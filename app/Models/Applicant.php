@@ -32,6 +32,10 @@ class Applicant extends Model
         'pagibig_file',
     ];
 
+    protected $casts = [
+        'expected_salary' => 'decimal:2',
+    ];
+
     /**
      * Helper to get the full name of the applicant.
      * This is used in the controller to map the 'name' key for the frontend table.

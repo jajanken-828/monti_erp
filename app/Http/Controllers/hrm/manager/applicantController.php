@@ -48,15 +48,19 @@ class ApplicantController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:applicants,email',
             'phone_number' => 'required|string',
             'position_applied' => 'required|string',
-            'notice_period' => 'required|string',
+            'expected_salary' => 'nullable|numeric',
+            'notice_period' => 'required|string|in:immediate,15_days,30_days',
             'street_address' => 'required|string',
+            'street_address_line2' => 'nullable|string',
             'city' => 'required|string',
             'state_province' => 'required|string',
             'postal_zip_code' => 'required|string',
+            'textile_experience' => 'required|string|in:yes,no',
             // File validations
             'sss_file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'philhealth_file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -90,14 +94,28 @@ class ApplicantController extends Controller
     {
         $request->validate([
             'scheduled_at' => 'required|date',
+            'interview_type' => 'required|string|in:phone,technical,behavioral,onsite,video',
+            'duration' => 'required|integer|in:15,30,45,60',
+            'interviewer' => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
         ]);
 
+        // Update applicant status to "Interview"
+        $applicant->update(['status' => 'Interview']);
+
+        // Create the interview with all fields
         Interview::create([
             'applicant_id' => $applicant->id,
             'scheduled_at' => $request->scheduled_at,
+            'interview_type' => $request->interview_type,
+            'duration' => $request->duration,
+            'interviewer' => $request->interviewer,
+            'location' => $request->location,
+            'notes' => $request->notes,
         ]);
 
         // Once scheduled, the applicant will be filtered out of the index query automatically
-        return back()->with('success', 'Interview scheduled.');
+        return back()->with('success', 'Interview scheduled successfully.');
     }
 }

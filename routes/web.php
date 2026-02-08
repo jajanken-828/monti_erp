@@ -61,6 +61,16 @@ Route::prefix('dashboard/hrm')->name('hrm.')->middleware(['auth', 'verified'])->
         ->middleware(['role:HRM', 'position:staff'])
         ->name('employee.interview');
 
+    // Inside the hrm prefix group...
+    Route::post('/interview/{interview}/evaluate', [InterviewController::class, 'updateStatus'])
+        ->middleware(['role:HRM', 'position:staff'])
+        ->name('employee.interview.evaluate');
+
+    // Inside your hrm prefix and employee/staff middleware group:
+    Route::post('/interview/{interview}/reschedule', [InterviewController::class, 'reschedule'])
+        ->middleware(['role:HRM', 'position:staff'])
+        ->name('employee.interview.reschedule');
+
     // --- HRM Manager Routes ---
     Route::get('/manager', [DashboardController::class, 'index'])
         ->middleware(['role:HRM', 'position:manager'])
@@ -77,7 +87,7 @@ Route::prefix('dashboard/hrm')->name('hrm.')->middleware(['auth', 'verified'])->
             ->name('applicants.store');
 
         Route::post('/applicants/{applicant}/schedule', 'scheduleInterview')
-            ->middleware(['role:HRM', 'position:manager'])
+            ->middleware(['role:HRM', 'position:manager,staff'])
             ->name('applicants.schedule');
     });
 

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('expected_salary')->nullable();
             $table->enum('notice_period', ['immediate', '15_days', '30_days'])->default('immediate');
             $table->enum('textile_experience', ['yes', 'no'])->default('no');
-            $table->string('status')->default('Pending'); // Pending, Rejected, Hired
+            $table->string('status')->default('Pending'); // Pending, Interview, Hired, Rejected
             $table->string('sss_file')->nullable();
             $table->string('philhealth_file')->nullable();
             $table->string('pagibig_file')->nullable();
@@ -35,7 +35,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('applicant_id')->constrained()->onDelete('cascade');
             $table->dateTime('scheduled_at');
-            $table->string('location')->default('Office');
+            $table->string('interview_type')->nullable();
+            $table->integer('duration')->default(45); // in minutes
+            $table->string('interviewer')->nullable();
+            $table->string('location')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

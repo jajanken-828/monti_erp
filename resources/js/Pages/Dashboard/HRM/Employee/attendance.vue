@@ -82,7 +82,7 @@ const handleClockAction = (type) => {
                         {{ new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) }}
                     </p>
 
-                    <div class="grid grid-cols-1 gap-4">
+                    <!-- <div class="grid grid-cols-1 gap-4">
                         <button @click="handleClockAction('in')" :disabled="attendance_status.is_clocked_in" :class="[
                             'flex items-center justify-center gap-3 py-5 rounded-2xl font-black uppercase tracking-widest transition-all',
                             !attendance_status.is_clocked_in
@@ -102,7 +102,7 @@ const handleClockAction = (type) => {
                             <LogOut class="h-5 w-5" />
                             Clock Out
                         </button>
-                    </div>
+                    </div> -->
 
                     <div class="mt-8 pt-8 border-t border-slate-50 dark:border-slate-700 grid grid-cols-2 gap-4">
                         <div class="text-left">
@@ -176,7 +176,7 @@ const handleClockAction = (type) => {
                                     class="group hover:bg-slate-50/50 transition-all">
                                     <td class="px-8 py-5">
                                         <span class="text-sm font-bold text-slate-900 dark:text-white">{{ log.date
-                                            }}</span>
+                                        }}</span>
                                     </td>
                                     <td class="px-8 py-5">
                                         <div
@@ -194,7 +194,7 @@ const handleClockAction = (type) => {
                                     </td>
                                     <td class="px-8 py-5">
                                         <span class="text-sm font-black text-slate-900 dark:text-white">{{ log.hours
-                                            }}</span>
+                                        }}</span>
                                     </td>
                                     <td class="px-8 py-5">
                                         <span :class="[
