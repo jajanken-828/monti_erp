@@ -1,41 +1,28 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import StatsCard from '@/Components/dashboard/StatsCard.vue';
+import { Truck, PackageSearch, ClipboardCheck } from 'lucide-vue-next';
 
 const props = defineProps({
-    stats: Object
-})
+    stats: Object,
+    user: Object
+});
 </script>
 
 <template>
-
-    <Head title="HRM Manager Dashboard" />
-
     <AuthenticatedLayout>
-        <template #header>
-            HRM Manager Dashboard
-        </template>
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">SCM Operations Portal</h2>
+            <p class="text-gray-500 dark:text-gray-400">Welcome, {{ user.name }}. Manage your logistics tasks here.</p>
+        </div>
 
-        <template #subheader>
-            Manage your HR team and operations
-        </template>
-
-        <!-- Your existing stats and content here -->
-        <div class="space-y-6">
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Total Employees</p>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats.totalEmployees }}</p>
-                </div>
-                <!-- ... other stat cards -->
-            </div>
-
-            <!-- Content cards -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h2>
-                <!-- Your quick actions here -->
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <StatsCard title="Pending Pickups" :value="stats.pendingPickups" :icon="Truck"
+                colorClass="text-blue-600 bg-blue-50 dark:bg-blue-900/20" />
+            <StatsCard title="Shipments Due" :value="stats.incomingShipments" :icon="PackageSearch"
+                colorClass="text-orange-600 bg-orange-50 dark:bg-orange-900/20" />
+            <StatsCard title="Inventory Checks" :value="stats.inventoryChecks" :icon="ClipboardCheck"
+                colorClass="text-cyan-600 bg-cyan-50 dark:bg-cyan-900/20" />
         </div>
     </AuthenticatedLayout>
 </template>

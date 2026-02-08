@@ -11,18 +11,21 @@ class CheckPosition
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  string  ...$positions  <-- The "..." allows multiple arguments
      */
-    public function handle(Request $request, Closure $next, string $position): Response
+    public function handle(Request $request, Closure $next, ...$positions): Response
     {
+        // 1. Check if user is logged in
         if (! $request->user()) {
             abort(403, 'Unauthorized.');
         }
 
-        // Convert position to lowercase to match database enum
-        $requiredPosition = strtolower($position);
+        // 2. Normalize all allowed positions to lowercase
+        $allowedPositions = array_map('strtolower', $positions);
 
-        if ($request->user()->position !== $requiredPosition) {
+        // 3. Check if the user's position is in the allowed list
+        // Assuming your DB stores position as 'manager', 'staff', etc.
+        if (! in_array(strtolower($request->user()->position), $allowedPositions)) {
             abort(403, 'You do not have permission to access this resource.');
         }
 

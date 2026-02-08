@@ -8,205 +8,200 @@ defineProps<{
     phpVersion: string;
 }>();
 
+const products = [
+    { name: 'Organic Cotton', desc: 'Sustainable, high-thread-count cotton for premium apparel.', icon: 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707' },
+    { name: 'Technical Fabrics', desc: 'High-performance synthetics for industrial and athletic use.', icon: 'M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751A11.956 11.956 0 0112 2.714z' },
+    { name: 'Eco-Blends', desc: 'Recycled polyester and bamboo fibers for the eco-conscious brand.', icon: 'M7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z' },
+];
+
 function handleImageError() {
     document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
     document.getElementById('background')?.classList.add('!hidden');
 }
 </script>
 
 <template>
 
-    <Head title="Welcome to Monti Textile Manufacturing" />
+    <Head title="Monti Textile Corp | Global Manufacturing" />
+
     <div
-        class="bg-gradient-to-br from-blue-50 to-gray-100 text-gray-800 dark:from-gray-900 dark:to-gray-800 dark:text-gray-200">
-        <img id="background" class="absolute -left-20 top-0 max-w-[877px] opacity-20"
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop"
-            alt="Textile pattern background" />
-        <div
-            class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#1E40AF] selection:text-white">
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-                    <div class="flex lg:col-start-2 lg:justify-center">
-                        <div class="text-center">
-                            <h1 class="text-4xl font-bold text-[#1E40AF] dark:text-blue-400">
-                                Monti Textile
-                            </h1>
-                            <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
-                                Manufacturing Excellence Since 1985
-                            </p>
+        class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans selection:bg-blue-500 selection:text-white">
+        <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
+            style="background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');">
+        </div>
+
+        <div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header class="flex items-center justify-between py-8 border-b border-slate-200 dark:border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="h-10 w-10 flex-shrink-0 mr-3">
+                        <img src="/images/applogo.png" alt="Monti Textile Logo" class="h-full w-full object-contain" />
+                    </div>
+                    <span
+                        class="text-2xl font-black tracking-tight uppercase text-blue-900 dark:text-blue-400">Monti<span
+                            class="font-light text-slate-500">Textile</span></span>
+                </div>
+
+                <nav v-if="canLogin" class="flex items-center space-x-4">
+                    <Link v-if="$page.props.auth.user" :href="route('dashboard')"
+                        class="text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full transition shadow-lg shadow-blue-500/30">
+                        Go to Dashboard
+                    </Link>
+                    <template v-else>
+                        <Link :href="route('login')"
+                            class="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 transition">Log in
+                        </Link>
+                        <Link v-if="canRegister" :href="route('register')"
+                            class="text-sm font-semibold border-2 border-blue-600 text-blue-600 dark:text-blue-400 px-5 py-2 rounded-full hover:bg-blue-600 hover:text-white transition">
+                            Partner Registration</Link>
+                    </template>
+                </nav>
+            </header>
+
+            <main class="py-12">
+                <section class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                    <div>
+                        <span
+                            class="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-widest mb-4">Established
+                            1985</span>
+                        <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
+                            The Future of <span class="text-blue-600">Textile</span> Engineering.
+                        </h1>
+                        <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-xl">
+                            Monti Textile Corporation delivers high-precision fabric solutions to the world’s leading
+                            fashion houses
+                            and industrial manufacturers. From raw fiber to finished bolt, we define quality.
+                        </p>
+                        <div class="flex gap-4">
+                            <button
+                                class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:translate-y-[-2px] transition active:scale-95 shadow-xl shadow-blue-600/20">Our
+                                Catalog</button>
+                            <button
+                                class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 transition shadow-sm">Sustainability
+                                Report</button>
                         </div>
                     </div>
-                    <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
-                        <Link v-if="$page.props.auth.user" :href="route('dashboard')"
-                            class="rounded-md bg-[#1E40AF] px-4 py-2 text-white ring-1 ring-transparent transition hover:bg-[#1E3A8A] focus:outline-none focus-visible:ring-[#1E40AF] dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus-visible:ring-white">
-                            Dashboard
-                        </Link>
-
-                        <template v-else>
-                            <Link :href="route('login')"
-                                class="rounded-md px-4 py-2 text-[#1E40AF] ring-1 ring-transparent transition hover:text-[#1E3A8A] focus:outline-none focus-visible:ring-[#1E40AF] dark:text-blue-400 dark:hover:text-blue-300 dark:focus-visible:ring-white">
-                                Log in
-                            </Link>
-
-                            <Link v-if="canRegister" :href="route('register')"
-                                class="ml-3 rounded-md bg-[#1E40AF] px-4 py-2 text-white ring-1 ring-transparent transition hover:bg-[#1E3A8A] focus:outline-none focus-visible:ring-[#1E40AF] dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus-visible:ring-white">
-                                Register
-                            </Link>
-                        </template>
-                    </nav>
-                </header>
-
-                <main class="mt-6">
-                    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                        <div id="docs-card"
-                            class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-lg ring-1 ring-gray-200 transition duration-300 hover:shadow-xl hover:ring-blue-200 focus:outline-none focus-visible:ring-[#1E40AF] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-gray-800 dark:ring-gray-700 dark:hover:ring-blue-500">
-                            <div id="screenshot-container" class="relative flex w-full flex-1 items-stretch">
-                                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2058&auto=format&fit=crop"
-                                    alt="Monti Textile Manufacturing Facility"
-                                    class="aspect-video h-full w-full flex-1 rounded-lg object-cover object-center shadow-md"
-                                    @error="handleImageError" />
-                            </div>
-
-                            <div class="relative flex items-center gap-6 lg:items-end">
-                                <div id="docs-card-content" class="flex items-start gap-6 lg:flex-col">
-                                    <div
-                                        class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#1E40AF]/10 sm:size-16">
-                                        <svg class="size-5 sm:size-6 text-[#1E40AF]" fill="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                        </svg>
-                                    </div>
-
-                                    <div class="pt-3 sm:pt-5 lg:pt-0">
-                                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                            About Monti Textile
-                                        </h2>
-
-                                        <p class="mt-4 text-sm/relaxed text-gray-600 dark:text-gray-300">
-                                            Since 1985, Monti Textile has been a leader in high-quality fabric
-                                            manufacturing.
-                                            We specialize in sustainable textile production, innovative fabric
-                                            technologies,
-                                            and delivering exceptional products to clients worldwide.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a href="#"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg ring-1 ring-gray-200 transition duration-300 hover:shadow-xl hover:ring-blue-200 focus:outline-none focus-visible:ring-[#1E40AF] lg:pb-10 dark:bg-gray-800 dark:ring-gray-700 dark:hover:ring-blue-500">
-                            <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#1E40AF]/10 sm:size-16">
-                                <svg class="size-5 sm:size-6 text-[#1E40AF]" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                            </div>
-
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                    HRM Portal
-                                </h2>
-
-                                <p class="mt-4 text-sm/relaxed text-gray-600 dark:text-gray-300">
-                                    Access the Human Resource Management portal for employee management,
-                                    payroll processing, attendance tracking, and workforce analytics.
-                                </p>
-                            </div>
-
-                            <svg class="size-6 shrink-0 self-center stroke-[#1E40AF]" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                        </a>
-
-                        <a href="#"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg ring-1 ring-gray-200 transition duration-300 hover:shadow-xl hover:ring-blue-200 focus:outline-none focus-visible:ring-[#1E40AF] lg:pb-10 dark:bg-gray-800 dark:ring-gray-700 dark:hover:ring-blue-500">
-                            <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#1E40AF]/10 sm:size-16">
-                                <svg class="size-5 sm:size-6 text-[#1E40AF]" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                            </div>
-
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                    SCM Portal
-                                </h2>
-
-                                <p class="mt-4 text-sm/relaxed text-gray-600 dark:text-gray-300">
-                                    Manage supply chain operations including raw material procurement,
-                                    inventory management, production planning, and logistics coordination.
-                                </p>
-                            </div>
-
-                            <svg class="size-6 shrink-0 self-center stroke-[#1E40AF]" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                            </svg>
-                        </a>
-
+                    <div id="screenshot-container" class="relative">
                         <div
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg ring-1 ring-gray-200 lg:pb-10 dark:bg-gray-800 dark:ring-gray-700">
-                            <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#1E40AF]/10 sm:size-16">
-                                <svg class="size-5 sm:size-6 text-[#1E40AF]" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
-                            </div>
-
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                    Secure & Reliable
-                                </h2>
-
-                                <p class="mt-4 text-sm/relaxed text-gray-600 dark:text-gray-300">
-                                    Our enterprise system ensures data security with role-based access control,
-                                    encrypted communications, and regular security audits to protect your information.
-                                </p>
-                            </div>
+                            class="absolute -inset-4 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-3xl blur-2xl opacity-20 dark:opacity-40">
                         </div>
+                        <img src="https://images.unsplash.com/photo-1558227691-41ea78d1f631?q=80&w=2000&auto=format&fit=crop"
+                            alt="Textile Production"
+                            class="relative rounded-2xl shadow-2xl border border-white/20 object-cover aspect-[4/3]"
+                            @error="handleImageError" />
+                    </div>
+                </section>
+
+                <hr class="border-slate-200 dark:border-slate-800 my-16">
+
+                <section class="grid md:grid-cols-3 gap-8 mb-24">
+                    <div
+                        class="group bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition shadow-sm">
+                        <div
+                            class="size-12 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition">
+                            <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Workforce HRM</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">Manage our 500+
+                            global staff
+                            members through the integrated Human Resource portal.</p>
+                        <a href="#" class="inline-flex items-center text-blue-600 font-bold text-sm">Access Portal <svg
+                                class="size-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 5l7 7-7 7" stroke-width="3" />
+                            </svg></a>
                     </div>
 
                     <div
-                        class="mt-12 rounded-lg bg-gradient-to-r from-[#1E40AF] to-blue-600 p-8 text-white dark:from-blue-800 dark:to-blue-900">
-                        <div class="grid gap-8 md:grid-cols-3">
-                            <div class="text-center">
-                                <div class="text-3xl font-bold">500+</div>
-                                <div class="mt-2 text-sm">Employees</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold">38 Years</div>
-                                <div class="mt-2 text-sm">Industry Experience</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-bold">50+</div>
-                                <div class="mt-2 text-sm">Countries Served</div>
+                        class="group bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition shadow-sm">
+                        <div
+                            class="size-12 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition">
+                            <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Supply Chain (SCM)</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">Real-time tracking of
+                            raw
+                            materials and logistics across 50+ countries served.</p>
+                        <a href="#" class="inline-flex items-center text-blue-600 font-bold text-sm">Track Logistics
+                            <svg class="size-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 5l7 7-7 7" stroke-width="3" />
+                            </svg></a>
+                    </div>
+
+                    <div
+                        class="group bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition shadow-sm">
+                        <div
+                            class="size-12 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition">
+                            <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.675.27a6 6 0 01-3.86.517L5.238 15.24a2 2 0 00-1.022.547l-1.414 1.414a2 2 0 001.414 3.414h15.586a2 2 0 001.414-3.414l-1.414-1.414z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Fabric Innovation</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">Explore our latest
+                            patents in
+                            moisture-wicking and antimicrobial textile tech.</p>
+                        <a href="#" class="inline-flex items-center text-blue-600 font-bold text-sm">Research Data <svg
+                                class="size-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 5l7 7-7 7" stroke-width="3" />
+                            </svg></a>
+                    </div>
+                </section>
+
+                <section class="mb-24">
+                    <h2 class="text-3xl font-bold mb-12 text-center">Core Textile Categories</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div v-for="product in products" :key="product.name"
+                            class="p-1 rounded-2xl bg-gradient-to-b from-slate-200 to-transparent dark:from-slate-800">
+                            <div class="bg-white dark:bg-slate-900 rounded-[calc(1rem-1px)] p-6 h-full">
+                                <h4 class="font-bold text-lg mb-2">{{ product.name }}</h4>
+                                <p class="text-slate-500 text-sm">{{ product.desc }}</p>
                             </div>
                         </div>
                     </div>
-                </main>
+                </section>
 
-                <footer class="py-16 text-center text-sm text-gray-600 dark:text-gray-300">
-                    <p class="mb-2">© 2026 Monti Textile Manufacturing Co. All rights reserved.</p>
-                    <p>Enterprise Management System v{{ laravelVersion }} (PHP v{{ phpVersion }})</p>
-                    <div class="mt-4 flex justify-center space-x-6">
-                        <a href="#" class="text-gray-500 hover:text-[#1E40AF]">Contact</a>
-                        <a href="#" class="text-gray-500 hover:text-[#1E40AF]">Privacy Policy</a>
-                        <a href="#" class="text-gray-500 hover:text-[#1E40AF]">Terms of Service</a>
-                        <a href="#" class="text-gray-500 hover:text-[#1E40AF]">Support</a>
+                <section class="bg-blue-900 rounded-3xl p-12 text-white overflow-hidden relative shadow-2xl">
+                    <div
+                        class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 size-96 bg-blue-500/20 rounded-full blur-3xl">
                     </div>
-                </footer>
-            </div>
+                    <div class="relative grid md:grid-cols-3 gap-8 text-center">
+                        <div>
+                            <div class="text-5xl font-black mb-2">500+</div>
+                            <div class="text-blue-200 uppercase tracking-widest text-xs font-bold">Skilled Experts</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black mb-2">38</div>
+                            <div class="text-blue-200 uppercase tracking-widest text-xs font-bold">Years of Trust</div>
+                        </div>
+                        <div>
+                            <div class="text-5xl font-black mb-2">100%</div>
+                            <div class="text-blue-200 uppercase tracking-widest text-xs font-bold">Quality Certified
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="py-12 border-t border-slate-200 dark:border-slate-800">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="text-sm text-slate-500 dark:text-slate-400">
+                        © 2026 Monti Textile Manufacturing Co. <span class="mx-2">|</span>
+                        <span class="font-mono text-[10px] opacity-60">System: L{{ laravelVersion }} - P{{ phpVersion
+                        }}</span>
+                    </div>
+                    <div class="flex space-x-8 text-sm font-medium">
+                        <a href="#" class="hover:text-blue-600 transition">Privacy</a>
+                        <a href="#" class="hover:text-blue-600 transition">Terms</a>
+                        <a href="#" class="hover:text-blue-600 transition">Global Support</a>
+                        <a href="#" class="hover:text-blue-600 transition">Investor Relations</a>
+                    </div>
+                </div>
+            </footer>
         </div>
     </div>
 </template>
