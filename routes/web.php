@@ -61,14 +61,25 @@ Route::prefix('dashboard/hrm')->name('hrm.')->middleware(['auth', 'verified'])->
         ->middleware(['role:HRM', 'position:staff'])
         ->name('employee.interview');
 
-    // Pointing to consolidated index logic for HRM Manager
+    // --- HRM Manager Routes ---
     Route::get('/manager', [DashboardController::class, 'index'])
         ->middleware(['role:HRM', 'position:manager'])
         ->name('manager.dashboard');
 
-    Route::get('/applicants', [ApplicantController::class, 'index'])
-        ->middleware(['role:HRM', 'position:manager,staff'])
-        ->name('applicants.index');
+    // Updated Applicant Routes
+    Route::controller(ApplicantController::class)->group(function () {
+        Route::get('/applicants', 'index')
+            ->middleware(['role:HRM', 'position:manager,staff'])
+            ->name('applicants.index');
+
+        Route::post('/applicants', 'store')
+            ->middleware(['role:HRM', 'position:manager,staff'])
+            ->name('applicants.store');
+
+        Route::post('/applicants/{applicant}/schedule', 'scheduleInterview')
+            ->middleware(['role:HRM', 'position:manager'])
+            ->name('applicants.schedule');
+    });
 
     Route::get('/onboarding', [OnboardingController::class, 'onboarding'])
         ->middleware(['role:HRM', 'position:manager'])
@@ -90,12 +101,10 @@ Route::prefix('dashboard/hrm')->name('hrm.')->middleware(['auth', 'verified'])->
 */
 Route::prefix('dashboard/scm')->name('scm.')->middleware(['auth', 'verified'])->group(function () {
 
-    // Removed ScmdashboardController and pointed to consolidated DashboardController
     Route::get('/manager', [DashboardController::class, 'index'])
         ->middleware(['role:SCM', 'position:manager'])
         ->name('manager.dashboard');
 
-    // Example route for SCM staff if needed
     Route::get('/staff', [DashboardController::class, 'index'])
         ->middleware(['role:SCM', 'position:staff'])
         ->name('staff.dashboard');
