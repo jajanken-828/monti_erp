@@ -57,11 +57,18 @@ const navItems = computed(() => {
     if (userRole === 'SCM') {
         if (userPosition === 'manager') {
             items.push(
-                { label: 'Inventory Dashboard', href: route('scm.manager.dashboard'), icon: Package }
+                // { label: 'Inventory Dashboard', href: route('scm.manager.dashboard'), icon: Package },
+                { label: 'Sourcing', href: route('scm.manager.sourcing'), icon: Truck },
+                { label: 'Audit', href: route('scm.manager.audit'), icon: ChartNoAxesCombined },
+                { label: 'Close', href: route('scm.manager.close'), icon: DoorOpen }
             );
         } else if (userPosition === 'staff') {
             items.push(
-                { label: 'Logistics Tasks', href: route('scm.staff.dashboard'), icon: Truck }
+                // { label: 'Logistics Tasks', href: route('scm.staff.dashboard'), icon: Truck },
+                { label: 'Inbound', href: route('scm.employee.inbound'), icon: Truck },
+                { label: 'Recieving', href: route('scm.employee.recieving'), icon: Truck },
+                { label: 'Inventory Management', href: route('scm.employee.inventory'), icon: Package },
+                { label: 'Verifications', href: route('scm.employee.verification'), icon: HandCoins }
             );
         }
     }

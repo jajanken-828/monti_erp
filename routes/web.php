@@ -10,6 +10,13 @@ use App\Http\Controllers\hrm\manager\ApplicantController;
 use App\Http\Controllers\hrm\manager\OnboardingController;
 use App\Http\Controllers\hrm\manager\PayrollController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\scm\employee\InboundController;
+use App\Http\Controllers\scm\employee\InventoryController;
+use App\Http\Controllers\scm\employee\RecievingController;
+use App\Http\Controllers\scm\employee\VerificationController;
+use App\Http\Controllers\scm\manager\AuditController;
+use App\Http\Controllers\scm\manager\CloseController;
+use App\Http\Controllers\scm\manager\SourcingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -115,9 +122,38 @@ Route::prefix('dashboard/scm')->name('scm.')->middleware(['auth', 'verified'])->
         ->middleware(['role:SCM', 'position:manager'])
         ->name('manager.dashboard');
 
+    Route::get('/sourcing', [SourcingController::class, 'sourcing'])
+        ->middleware(['role:SCM', 'position:manager'])
+        ->name('manager.sourcing');
+
+    Route::get('/audit', [AuditController::class, 'audit'])
+        ->middleware(['role:SCM', 'position:manager'])
+        ->name('manager.audit');
+
+    Route::get('/close', [CloseController::class, 'close'])
+        ->middleware(['role:SCM', 'position:manager'])
+        ->name('manager.close');
+
     Route::get('/staff', [DashboardController::class, 'index'])
         ->middleware(['role:SCM', 'position:staff'])
-        ->name('staff.dashboard');
+        ->name('employee.dashboard');
+
+    Route::get('/inbound', [InboundController::class, 'inbound'])
+        ->middleware(['role:SCM', 'position:staff'])
+        ->name('employee.inbound');
+
+    Route::get('/inventory', [InventoryController::class, 'inventory'])
+        ->middleware(['role:SCM', 'position:staff'])
+        ->name('employee.inventory');
+
+    Route::get('/recieving', [RecievingController::class, 'recieving'])
+        ->middleware(['role:SCM', 'position:staff'])
+        ->name('employee.recieving');
+
+    Route::get('/verification', [VerificationController::class, 'verification'])
+        ->middleware(['role:SCM', 'position:staff'])
+        ->name('employee.verification');
+
 });
 
 require __DIR__.'/auth.php';
