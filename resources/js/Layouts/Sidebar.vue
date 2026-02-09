@@ -14,7 +14,14 @@ import {
     FileUser,
     DoorOpen,
     BicepsFlexed,
-    Truck
+    Truck,
+    Wallet,
+    Factory,
+    Boxes,
+    ShoppingCart,
+    Warehouse,
+    Users,
+    Globe
 } from 'lucide-vue-next'
 
 const page = usePage()
@@ -22,7 +29,6 @@ const user = computed(() => page.props.auth.user)
 const currentUrl = computed(() => page.url)
 
 const navItems = computed(() => {
-    // Basic items available to everyone
     const items = [
         { label: 'Main Dashboard', href: route('dashboard'), icon: LayoutDashboard },
     ]
@@ -30,46 +36,94 @@ const navItems = computed(() => {
     const userRole = user.value?.role?.toUpperCase();
     const userPosition = user.value?.position?.toLowerCase();
 
-    // --- HRM Department Logic ---
     if (userRole === 'HRM') {
         if (userPosition === 'manager') {
             items.push(
                 { label: 'Onboarding', href: route('hrm.manager.onboarding'), icon: BarChart3 },
-                // { label: 'Recruitment', href: route('hrm.applicants.index'), icon: UserPlus },
                 { label: 'Payroll', href: route('hrm.manager.payroll'), icon: HandCoins },
                 { label: 'Analytics', href: route('hrm.manager.analytics'), icon: ChartNoAxesCombined }
             );
         } else if (userPosition === 'staff') {
             items.push(
-                // { label: 'My HR Portal', href: route('hrm.employee.dashboard'), icon: ClipboardList }
                 { label: 'Recruitment', href: route('hrm.applicants.index'), icon: UserPlus },
                 { label: 'Interview', href: route('hrm.employee.interview'), icon: ClipboardList },
                 { label: 'Training & Development', href: route('hrm.employee.training'), icon: BicepsFlexed },
                 { label: 'Attendance', href: route('hrm.employee.attendance'), icon: FileUser },
                 { label: 'Leave Management', href: route('hrm.employee.leave'), icon: DoorOpen }
-
-
             );
         }
     }
 
-    // --- SCM Department Logic ---
     if (userRole === 'SCM') {
         if (userPosition === 'manager') {
             items.push(
-                // { label: 'Inventory Dashboard', href: route('scm.manager.dashboard'), icon: Package },
                 { label: 'Sourcing', href: route('scm.manager.sourcing'), icon: Truck },
                 { label: 'Audit', href: route('scm.manager.audit'), icon: ChartNoAxesCombined },
                 { label: 'Close', href: route('scm.manager.close'), icon: DoorOpen }
             );
         } else if (userPosition === 'staff') {
             items.push(
-                // { label: 'Logistics Tasks', href: route('scm.staff.dashboard'), icon: Truck },
                 { label: 'Inbound', href: route('scm.employee.inbound'), icon: Truck },
                 { label: 'Recieving', href: route('scm.employee.recieving'), icon: Truck },
                 { label: 'Inventory Management', href: route('scm.employee.inventory'), icon: Package },
                 { label: 'Verifications', href: route('scm.employee.verification'), icon: HandCoins }
             );
+        }
+    }
+
+    if (userRole === 'FIN') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Finance Dashboard', href: route('fin.manager.dashboard'), icon: Wallet });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Finance Portal', href: route('fin.employee.dashboard'), icon: Wallet });
+        }
+    }
+
+    if (userRole === 'MAN') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Manufacturing MGMT', href: route('man.manager.dashboard'), icon: Factory });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Production Line', href: route('man.employee.dashboard'), icon: Factory });
+        }
+    }
+
+    if (userRole === 'INV') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Inventory Dashboard', href: route('inv.manager.dashboard'), icon: Boxes });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Stock Control', href: route('inv.employee.dashboard'), icon: Boxes });
+        }
+    }
+
+    if (userRole === 'ORD') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Order Analytics', href: route('ord.manager.dashboard'), icon: ShoppingCart });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Order Processing', href: route('ord.employee.dashboard'), icon: ShoppingCart });
+        }
+    }
+
+    if (userRole === 'WAR') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Warehouse MGMT', href: route('war.manager.dashboard'), icon: Warehouse });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Warehouse Floor', href: route('war.employee.dashboard'), icon: Warehouse });
+        }
+    }
+
+    if (userRole === 'CRM') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Relations Dashboard', href: route('crm.manager.dashboard'), icon: Users });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Customer Support', href: route('crm.employee.dashboard'), icon: Users });
+        }
+    }
+
+    if (userRole === 'ECO') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Store Management', href: route('eco.manager.dashboard'), icon: Globe });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Online Store', href: route('eco.employee.dashboard'), icon: Globe });
         }
     }
 
@@ -85,7 +139,6 @@ const isActive = (href) => {
     <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-50">
         <div
             class="flex flex-col flex-grow bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 shadow-sm">
-
             <div class="flex items-center h-20 flex-shrink-0 px-5 border-b border-gray-50 dark:border-gray-800">
                 <div class="h-10 w-10 flex-shrink-0 mr-3">
                     <img src="/images/applogo.png" alt="Monti Textile Logo" class="h-full w-full object-contain" />

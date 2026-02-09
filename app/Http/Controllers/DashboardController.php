@@ -15,9 +15,24 @@ class DashboardController extends Controller
         $role = strtoupper($user->role);
         $position = strtolower($user->position);
 
+        // For debugging - can be removed later
+        \Log::info('Dashboard access', [
+            'user_id' => $user->id,
+            'role' => $role,
+            'position' => $position,
+            'route' => $request->fullUrl(),
+        ]);
+
         return match ($role) {
             'HRM' => $this->handleHrmDashboard($position),
             'SCM' => $this->handleScmDashboard($position),
+            'FIN' => $this->handleFinDashboard($position),
+            'MAN' => $this->handleManDashboard($position),
+            'INV' => $this->handleInvDashboard($position),
+            'ORD' => $this->handleOrdDashboard($position),
+            'WAR' => $this->handleWarDashboard($position),
+            'CRM' => $this->handleCrmDashboard($position),
+            'ECO' => $this->handleEcoDashboard($position),
             default => $this->renderDefaultDashboard($user),
         };
     }
@@ -35,7 +50,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        // HRM Staff Dashboard
         return Inertia::render('Dashboard/HRM/Employee/Index', [
             'stats' => [
                 'assignedTasks' => 4,
@@ -61,7 +75,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        // SCM Staff Dashboard
         return Inertia::render('Dashboard/SCM/Employee/Index', [
             'stats' => [
                 'pendingPickups' => 5,
@@ -72,10 +85,150 @@ class DashboardController extends Controller
         ]);
     }
 
+    private function handleFinDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/FIN/Manager/index' : 'Dashboard/FIN/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'stats' => [
+                'totalRevenue' => 0,
+                'pendingInvoices' => 0,
+                'overduePayments' => 0,
+            ],
+        ]);
+    }
+
+    private function handleManDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/MAN/Manager/index' : 'Dashboard/MAN/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'productionLines' => [],
+            'stats' => [
+                'activeLines' => 0,
+                'dailyOutput' => 0,
+                'defectRate' => 0,
+            ],
+        ]);
+    }
+
+    /**
+     * Updated Inventory Dashboard Logic
+     */
+    private function handleInvDashboard(string $position)
+    {
+        // For INV staff, use the specific inventory dashboard
+        if ($position === 'manager') {
+            return Inertia::render('Dashboard/INV/Manager/index', [
+                'user' => Auth::user(),
+                'stockLevels' => [
+                    ['id' => 1, 'name' => 'Cotton Fabric', 'sku' => 'CF-001', 'quantity' => 150, 'status' => 'In Stock'],
+                    ['id' => 2, 'name' => 'Polyester Blend', 'sku' => 'PB-002', 'quantity' => 85, 'status' => 'In Stock'],
+                    ['id' => 3, 'name' => 'Silk Material', 'sku' => 'SM-003', 'quantity' => 25, 'status' => 'Low Stock'],
+                    ['id' => 4, 'name' => 'Denim', 'sku' => 'DN-004', 'quantity' => 200, 'status' => 'In Stock'],
+                    ['id' => 5, 'name' => 'Wool Blend', 'sku' => 'WB-005', 'quantity' => 8, 'status' => 'Critical'],
+                ],
+                'stats' => [
+                    'totalItems' => 468,
+                    'lowStock' => 12,
+                    'outOfStock' => 3,
+                    'warehouseCapacity' => 85,
+                ],
+            ]);
+        }
+
+        // For staff position - use the Inventory Stock Control view
+        return Inertia::render('Dashboard/INV/Employee/index', [
+            'user' => Auth::user(),
+            'stockLevels' => [
+                ['id' => 1, 'name' => 'Cotton Fabric', 'sku' => 'CF-001', 'quantity' => 150, 'status' => 'In Stock'],
+                ['id' => 2, 'name' => 'Polyester Blend', 'sku' => 'PB-002', 'quantity' => 85, 'status' => 'In Stock'],
+                ['id' => 3, 'name' => 'Silk Material', 'sku' => 'SM-003', 'quantity' => 25, 'status' => 'Low Stock'],
+                ['id' => 4, 'name' => 'Denim', 'sku' => 'DN-004', 'quantity' => 200, 'status' => 'In Stock'],
+                ['id' => 5, 'name' => 'Wool Blend', 'sku' => 'WB-005', 'quantity' => 8, 'status' => 'Critical'],
+                ['id' => 6, 'name' => 'Linen', 'sku' => 'LN-006', 'quantity' => 45, 'status' => 'In Stock'],
+                ['id' => 7, 'name' => 'Satin', 'sku' => 'ST-007', 'quantity' => 60, 'status' => 'In Stock'],
+                ['id' => 8, 'name' => 'Velvet', 'sku' => 'VL-008', 'quantity' => 15, 'status' => 'Low Stock'],
+            ],
+            'stats' => [
+                'totalItems' => 468,
+                'lowStock' => 12,
+                'outOfStock' => 3,
+                'warehouseCapacity' => 85,
+            ],
+        ]);
+    }
+
+    private function handleOrdDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/ORD/Manager/index' : 'Dashboard/ORD/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'recentOrders' => [],
+            'stats' => [
+                'pendingOrders' => 0,
+                'completedToday' => 0,
+                'totalRevenue' => 0,
+            ],
+        ]);
+    }
+
+    private function handleWarDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/WAR/Manager/index' : 'Dashboard/WAR/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'bins' => [],
+            'stats' => [
+                'totalBins' => 0,
+                'occupiedBins' => 0,
+                'availableBins' => 0,
+            ],
+        ]);
+    }
+
+    private function handleCrmDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/CRM/Manager/index' : 'Dashboard/CRM/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'customers' => [],
+            'stats' => [
+                'totalCustomers' => 0,
+                'newThisMonth' => 0,
+                'satisfactionRate' => 0,
+            ],
+        ]);
+    }
+
+    private function handleEcoDashboard(string $position)
+    {
+        $view = $position === 'manager' ? 'Dashboard/ECO/Manager/index' : 'Dashboard/ECO/Employee/index';
+
+        return Inertia::render($view, [
+            'user' => Auth::user(),
+            'onlineSales' => [],
+            'stats' => [
+                'todaySales' => 0,
+                'monthlyRevenue' => 0,
+                'activeProducts' => 0,
+            ],
+        ]);
+    }
+
     private function renderDefaultDashboard($user)
     {
-        return Inertia::render('Dashboard/Index', [
-            'stats' => ['total_tasks' => 0],
+        return Inertia::render('Dashboard', [
+            'stats' => [
+                'total_tasks' => 0,
+                'pending_tasks' => 0,
+                'completed_tasks' => 0,
+            ],
             'user' => $user,
         ]);
     }

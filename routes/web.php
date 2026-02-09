@@ -156,4 +156,87 @@ Route::prefix('dashboard/scm')->name('scm.')->middleware(['auth', 'verified'])->
 
 });
 
+/*
+|--------------------------------------------------------------------------
+| Additional Department Dashboards
+|--------------------------------------------------------------------------
+*/
+
+// Finance (FIN) - Fixed named routes
+Route::prefix('dashboard/fin')->name('fin.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:FIN', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:FIN', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// Manufacturing (MAN)
+Route::prefix('dashboard/man')->name('man.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:MAN', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:MAN', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// Inventory (INV)
+Route::prefix('dashboard/inv')->name('inv.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:INV', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:INV', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// Order Management (ORD)
+Route::prefix('dashboard/ord')->name('ord.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:ORD', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:ORD', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// Warehouse (WAR)
+Route::prefix('dashboard/war')->name('war.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:WAR', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:WAR', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// CRM
+Route::prefix('dashboard/crm')->name('crm.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:CRM', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:CRM', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
+// E-Commerce (ECO)
+Route::prefix('dashboard/eco')->name('eco.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manager', [DashboardController::class, 'index'])
+        ->middleware(['role:ECO', 'position:manager'])
+        ->name('manager.dashboard');
+
+    Route::get('/staff', [DashboardController::class, 'index'])
+        ->middleware(['role:ECO', 'position:staff'])
+        ->name('employee.dashboard');
+});
+
 require __DIR__.'/auth.php';

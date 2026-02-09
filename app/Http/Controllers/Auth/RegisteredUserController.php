@@ -26,7 +26,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|in:HRM,SCM',
+            'role' => 'required|in:HRM,SCM,FIN,MAN,INV,ORD,WAR,CRM,ECO',
             'position' => 'required|in:manager,staff',
         ]);
 
@@ -37,6 +37,13 @@ class RegisteredUserController extends Controller
         $departmentName = match ($request->role) {
             'HRM' => 'Human Resource Management',
             'SCM' => 'Supply Chain Management',
+            'FIN' => 'Finance',
+            'MAN' => 'Manufacturing',
+            'INV' => 'Inventory',
+            'ORD' => 'Order Management',
+            'WAR' => 'Warehouse',
+            'CRM' => 'Customer Relationship Management',
+            'ECO' => 'E-commerce',
             default => $request->role,
         };
 

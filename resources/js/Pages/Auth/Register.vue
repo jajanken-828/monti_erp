@@ -57,6 +57,13 @@ const submit = () => {
                         <option value="" disabled>Select department</option>
                         <option value="HRM">Human Resource Management</option>
                         <option value="SCM">Supply Chain Management</option>
+                        <option value="FIN">Finance Management</option>
+                        <option value="MAN">Manufacturing Management</option>
+                        <option value="INV">Inventory Management</option>
+                        <option value="ORD">Order Management</option>
+                        <option value="WAR">Warehouse Management</option>
+                        <option value="CRM">Customer Relationship Management</option>
+                        <option value="ECO">Ecommerce Management</option>
                     </Select>
                     <InputError class="mt-2" :message="form.errors.role" />
                 </div>

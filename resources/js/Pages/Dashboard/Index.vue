@@ -1,10 +1,31 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, Link } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const props = defineProps({
     stats: Object,
     user: Object
+})
+
+// Define dashboards in an array to keep the template clean
+const departments = [
+    { name: 'HRM Department', desc: 'Manage employees and recruitment', route: 'hrm.employee.dashboard', color: 'from-blue-500 to-blue-600', role: 'HRM' },
+    { name: 'SCM Department', desc: 'Manage inventory and logistics', route: 'scm.employee.dashboard', color: 'from-green-500 to-green-600', role: 'SCM' },
+    { name: 'Finance', desc: 'Handle accounting and payroll', route: 'fin.employee.dashboard', color: 'from-teal-500 to-teal-600', role: 'FIN' },
+    { name: 'Manufacturing', desc: 'Monitor production lines', route: 'man.employee.dashboard', color: 'from-orange-500 to-orange-600', role: 'MAN' },
+    { name: 'Inventory', desc: 'Manage stock levels', route: 'inv.employee.dashboard', color: 'from-purple-500 to-purple-600', role: 'INV' },
+    { name: 'Order Management', desc: 'Manage Orders', route: 'ord.employee.dashboard', color: 'from-pink-500 to-pink-600', role: 'ORD' },
+    { name: 'Warehouse', desc: 'Manage Warehouse operations', route: 'war.employee.dashboard', color: 'from-indigo-500 to-indigo-600', role: 'WAR' },
+    { name: 'CRM', desc: 'Manage customer relationships', route: 'crm.employee.dashboard', color: 'from-red-500 to-red-600', role: 'CRM' },
+    { name: 'E-Commerce', desc: 'Manage online store orders', route: 'eco.employee.dashboard', color: 'from-yellow-500 to-yellow-600', role: 'ECO' },
+]
+
+// Filter departments based on user role if needed
+const filteredDepartments = departments.filter(dept => {
+    // If user has no specific role or is admin, show all
+    if (!props.user?.role || props.user?.role === 'ADMIN') return true
+    // Otherwise only show their department
+    return dept.role === props.user?.role
 })
 </script>
 
@@ -14,63 +35,43 @@ const props = defineProps({
 
     <AuthenticatedLayout>
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                Welcome to Your Dashboards
-            </h1>
-            <p class="text-gray-600 dark:text-gray-300">
-                Manage your operations efficiently
-            </p>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Welcome, {{ user?.name || 'User' }}</h1>
+            <p class="text-gray-600 dark:text-gray-300">Manage your operations efficiently</p>
         </div>
 
-        <!-- Generic stats for all users -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow p-6">
-                <p class="text-sm text-gray-600 dark:text-gray-400">Total Tasks</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats?.total_tasks || 0 }}</p>
+            <div v-for="(val, label) in { 'Total Tasks': stats?.total_tasks, 'Pending Tasks': stats?.pending_tasks, 'Completed Tasks': stats?.completed_tasks }"
+                :key="label"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-6">
+                <p class="text-sm text-gray-600 dark:text-gray-400">{{ label }}</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ val || 0 }}</p>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow p-6">
-                <p class="text-sm text-gray-600 dark:text-gray-400">Pending Tasks</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats?.pending_tasks || 0 }}</p>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow p-6">
-                <p class="text-sm text-gray-600 dark:text-gray-400">Completed Tasks</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ stats?.completed_tasks || 0 }}</p>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow p-6">
+
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-6">
                 <p class="text-sm text-gray-600 dark:text-gray-400">Your Role</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white capitalize">
-                    {{ user?.position || 'User' }}
-                </p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white capitalize">{{ user?.position || 'N/A' }}</p>
             </div>
         </div>
 
-        <!-- Quick Access Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow p-6 text-white">
-                <h3 class="text-lg font-semibold mb-2">HRM Department</h3>
-                <p class="mb-4">Manage employees, recruitment, and HR operations</p>
-                <a :href="route('hrm.employee.dashboard')"
-                    class="inline-block bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                    Go to HRM Dashboard
-                </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <div v-for="dept in filteredDepartments" :key="dept.route"
+                :class="['bg-gradient-to-r shadow-lg rounded-lg p-6 text-white transition-transform hover:scale-[1.02]', dept.color]">
+                <h3 class="text-lg font-semibold mb-2">{{ dept.name }}</h3>
+                <p class="mb-4 text-white/80 text-sm">{{ dept.desc }}</p>
+                <Link :href="route(dept.route)"
+                    class="inline-block bg-white/20 backdrop-blur-md text-white border border-white/30 px-4 py-2 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition-all">
+                    Open Dashboard
+                </Link>
             </div>
 
-            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow p-6 text-white">
-                <h3 class="text-lg font-semibold mb-2">SCM Department</h3>
-                <p class="mb-4">Manage inventory, supply chain, and logistics</p>
-                <a :href="route('scm.employee.dashboard')"
-                    class="inline-block bg-white text-green-600 px-4 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors">
-                    Go to SCM Dashboard
-                </a>
-            </div>
-
-            <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow p-6 text-white">
+            <div
+                class="bg-gradient-to-r from-gray-500 to-gray-600 rounded-lg shadow-lg p-6 text-white transition-transform hover:scale-[1.02]">
                 <h3 class="text-lg font-semibold mb-2">Profile Settings</h3>
-                <p class="mb-4">Update your personal information and preferences</p>
-                <a :href="route('profile.edit')"
-                    class="inline-block bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors">
+                <p class="mb-4 text-gray-50 text-sm">Update your personal information</p>
+                <Link :href="route('profile.edit')"
+                    class="inline-block bg-white text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
                     Edit Profile
-                </a>
+                </Link>
             </div>
         </div>
     </AuthenticatedLayout>

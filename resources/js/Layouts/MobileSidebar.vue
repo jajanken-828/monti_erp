@@ -16,14 +16,23 @@ import {
     FileUser,
     DoorOpen,
     BicepsFlexed,
-    Truck
+    Truck,
+    // New Icons synced from Desktop Sidebar
+    Wallet,
+    Factory,
+    Boxes,
+    ShoppingCart,
+    Warehouse,
+    Users,
+    Globe
 } from 'lucide-vue-next'
 
 const isOpen = ref(false)
 const page = usePage()
 const user = computed(() => page.props.auth.user)
+const currentUrl = computed(() => page.url)
 
-// Unified navigation logic to match the Desktop Sidebar for all 4 roles
+// Unified navigation logic to match the Desktop Sidebar exactly
 const navItems = computed(() => {
     const items = [
         { label: 'Main Dashboard', href: route('dashboard'), icon: LayoutDashboard },
@@ -32,18 +41,16 @@ const navItems = computed(() => {
     const userRole = user.value?.role?.toUpperCase();
     const userPosition = user.value?.position?.toLowerCase();
 
-    // HRM Department Mobile Logic
+    // --- HRM Department Logic ---
     if (userRole === 'HRM') {
         if (userPosition === 'manager') {
             items.push(
                 { label: 'Onboarding', href: route('hrm.manager.onboarding'), icon: BarChart3 },
-                { label: 'Recruitment', href: route('hrm.applicants.index'), icon: UserPlus },
                 { label: 'Payroll', href: route('hrm.manager.payroll'), icon: HandCoins },
                 { label: 'Analytics', href: route('hrm.manager.analytics'), icon: ChartNoAxesCombined }
             );
         } else if (userPosition === 'staff') {
             items.push(
-                // { label: 'My HR Portal', href: route('hrm.employee.dashboard'), icon: ClipboardList }
                 { label: 'Recruitment', href: route('hrm.applicants.index'), icon: UserPlus },
                 { label: 'Interview', href: route('hrm.employee.interview'), icon: ClipboardList },
                 { label: 'Training & Development', href: route('hrm.employee.training'), icon: BicepsFlexed },
@@ -53,28 +60,93 @@ const navItems = computed(() => {
         }
     }
 
-    // SCM Department Mobile Logic
+    // --- SCM Department Logic ---
     if (userRole === 'SCM') {
         if (userPosition === 'manager') {
             items.push(
-                // { label: 'Inventory Dashboard', href: route('scm.manager.dashboard'), icon: Package },
                 { label: 'Sourcing', href: route('scm.manager.sourcing'), icon: Truck },
                 { label: 'Audit', href: route('scm.manager.audit'), icon: ChartNoAxesCombined },
                 { label: 'Close', href: route('scm.manager.close'), icon: DoorOpen }
             );
         } else if (userPosition === 'staff') {
             items.push(
-                // { label: 'Logistics Tasks', href: route('scm.staff.dashboard'), icon: Truck },
-                { label: 'Inbound Shipments', href: route('scm.employee.inbound'), icon: Truck },
+                { label: 'Inbound', href: route('scm.employee.inbound'), icon: Truck },
                 { label: 'Recieving', href: route('scm.employee.recieving'), icon: Truck },
                 { label: 'Inventory Management', href: route('scm.employee.inventory'), icon: Package },
-                { label: 'Verification', href: route('scm.employee.verification'), icon: HandCoins }
+                { label: 'Verifications', href: route('scm.employee.verification'), icon: HandCoins }
             );
+        }
+    }
+
+    // --- Finance (FIN) ---
+    if (userRole === 'FIN') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Finance Dashboard', href: route('fin.manager.dashboard'), icon: Wallet });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Finance Portal', href: route('fin.employee.dashboard'), icon: Wallet });
+        }
+    }
+
+    // --- Manufacturing (MAN) ---
+    if (userRole === 'MAN') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Manufacturing', href: route('man.manager.dashboard'), icon: Factory });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Production Line', href: route('man.employee.dashboard'), icon: Factory });
+        }
+    }
+
+    // --- Inventory (INV) ---
+    if (userRole === 'INV') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Inventory Control', href: route('inv.manager.dashboard'), icon: Boxes });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Stock Control', href: route('inv.employee.dashboard'), icon: Boxes });
+        }
+    }
+
+    // --- Order Management (ORD) ---
+    if (userRole === 'ORD') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Order Management', href: route('ord.manager.dashboard'), icon: ShoppingCart });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Order Processing', href: route('ord.employee.dashboard'), icon: ShoppingCart });
+        }
+    }
+
+    // --- Warehouse (WAR) ---
+    if (userRole === 'WAR') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Warehouse', href: route('war.manager.dashboard'), icon: Warehouse });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Warehouse Floor', href: route('war.employee.dashboard'), icon: Warehouse });
+        }
+    }
+
+    // --- CRM ---
+    if (userRole === 'CRM') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Customer Relations', href: route('crm.manager.dashboard'), icon: Users });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Customer Support', href: route('crm.employee.dashboard'), icon: Users });
+        }
+    }
+
+    // --- E-Commerce (ECO) ---
+    if (userRole === 'ECO') {
+        if (userPosition === 'manager') {
+            items.push({ label: 'Online Store', href: route('eco.manager.dashboard'), icon: Globe });
+        } else if (userPosition === 'staff') {
+            items.push({ label: 'Online Store', href: route('eco.employee.dashboard'), icon: Globe });
         }
     }
 
     return items
 })
+
+const isActive = (href) => {
+    return currentUrl.value === href || currentUrl.value.startsWith(href + '/')
+}
 
 const closeSidebar = () => {
     isOpen.value = false
@@ -106,21 +178,26 @@ const closeSidebar = () => {
                                 <img src="/images/applogo.png" alt="Monti Textile Logo"
                                     class="h-full w-full object-contain" />
                             </div>
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Monti <span
-                                    class="text-blue-600">Textile</span></h2>
+                            <div class="flex flex-col">
+                                <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">
+                                    Monti <span class="text-blue-600">Textile</span>
+                                </h2>
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">ERP
+                                    System</span>
+                            </div>
                         </div>
 
                         <div
                             class="flex items-center p-3 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700">
                             <div
-                                class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                                class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-sm">
                                 {{ user?.name?.charAt(0) }}
                             </div>
                             <div class="ml-3 overflow-hidden">
                                 <p class="text-sm font-bold text-gray-900 dark:text-white truncate uppercase">{{
                                     user?.name }}</p>
                                 <div
-                                    class="flex items-center text-[10px] font-semibold text-blue-600 uppercase tracking-wider">
+                                    class="flex items-center text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                                     <ShieldCheck class="h-3 w-3 mr-1" />
                                     {{ user?.role }} • {{ user?.position }}
                                 </div>
@@ -129,10 +206,17 @@ const closeSidebar = () => {
                     </div>
 
                     <div class="flex-1 h-0 pt-4 pb-4 overflow-y-auto">
-                        <nav class="px-3 space-y-1">
+                        <nav class="px-3 space-y-1.5">
                             <Link v-for="item in navItems" :key="item.label" :href="item.href" @click="closeSidebar"
-                                class="group flex items-center px-3 py-3 text-base font-bold rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <component :is="item.icon" class="mr-3 h-5 w-5 text-gray-400" />
+                                :class="[
+                                    isActive(item.href)
+                                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 ring-1 ring-blue-100 dark:ring-blue-900/30'
+                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                                ]"
+                                class="group flex items-center px-3 py-3 text-base font-bold rounded-xl transition-all">
+                                <component :is="item.icon"
+                                    :class="[isActive(item.href) ? 'text-blue-600' : 'text-gray-400']"
+                                    class="mr-3 h-5 w-5" />
                                 {{ item.label }}
                             </Link>
                         </nav>
@@ -140,7 +224,7 @@ const closeSidebar = () => {
 
                     <div class="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/30 dark:bg-gray-900/30">
                         <Link :href="route('logout')" method="post" as="button"
-                            class="flex w-full items-center justify-center px-4 py-3 rounded-xl bg-red-50 text-red-600 font-bold text-sm">
+                            class="flex w-full items-center justify-center px-4 py-3 rounded-xl bg-red-50 dark:bg-red-900/10 text-red-600 font-bold text-sm transition-colors hover:bg-red-100 dark:hover:bg-red-900/20">
                             <LogOut class="mr-2 h-5 w-5" />
                             Sign Out
                         </Link>

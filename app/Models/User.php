@@ -68,6 +68,41 @@ class User extends Authenticatable // <--- Removed "implements MustVerifyEmail"
         return $query->where('role', 'SCM');
     }
 
+    public function scopeFin($query)
+    {
+        return $query->where('role', 'FIN');
+    }
+
+    public function scopeMan($query)
+    {
+        return $query->where('role', 'MAN');
+    }
+
+    public function scopeInv($query)
+    {
+        return $query->where('role', 'INV');
+    }
+
+    public function scopeOrd($query)
+    {
+        return $query->where('role', 'ORD');
+    }
+
+    public function scopeWar($query)
+    {
+        return $query->where('role', 'WAR');
+    }
+
+    public function scopeCrm($query)
+    {
+        return $query->where('role', 'CRM');
+    }
+
+    public function scopeEco($query)
+    {
+        return $query->where('role', 'ECO');
+    }
+
     /**
      * Get appropriate dashboard path based on department and position
      */
@@ -78,6 +113,20 @@ class User extends Authenticatable // <--- Removed "implements MustVerifyEmail"
             ['HRM', 'staff'] => route('hrm.employee.dashboard'),
             ['SCM', 'manager'] => route('scm.manager.dashboard'),
             ['SCM', 'staff'] => route('scm.employee.dashboard'),
+            ['FIN', 'manager'] => route('fin.manager.dashboard'),
+            ['FIN', 'staff'] => route('fin.employee.dashboard'),
+            ['MAN', 'manager'] => route('man.manager.dashboard'),
+            ['MAN', 'staff'] => route('man.employee.dashboard'),
+            ['INV', 'manager'] => route('inv.manager.dashboard'),
+            ['INV', 'staff'] => route('inv.employee.dashboard'),
+            ['ORD', 'manager'] => route('ord.manager.dashboard'),
+            ['ORD', 'staff'] => route('ord.employee.dashboard'),
+            ['WAR', 'manager'] => route('war.manager.dashboard'),
+            ['WAR', 'staff'] => route('war.employee.dashboard'),
+            ['CRM', 'manager'] => route('crm.manager.dashboard'),
+            ['CRM', 'staff'] => route('crm.employee.dashboard'),
+            ['ECO', 'manager'] => route('eco.manager.dashboard'),
+            ['ECO', 'staff'] => route('eco.employee.dashboard'),
             default => route('dashboard'),
         };
     }
